@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from pathlib import Path
 
-TEMPORAL_BIN = "/opt/homebrew/bin/temporal"
+TEMPORAL_BIN = os.environ.get("UNDERTAKER_TEMPORAL_BIN", "/opt/homebrew/bin/temporal")
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = Path(os.environ.get("UNDERTAKER_DATA", REPO_ROOT / ".data"))
 
