@@ -27,9 +27,22 @@ def _common(p: argparse.ArgumentParser) -> None:
     p.add_argument("--long-sleep", default=_env("long_sleep"), help="default 7d")
 
 
+def _demo_running(args: argparse.Namespace) -> bool:
+    """True when our demo is up and the command points at it (demo thresholds then apply)."""
+    from undertaker.config import DATA_DIR
+    from undertaker.demo.server import ADDRESS, Demo
+
+    if args.address != ADDRESS or args.namespace != "default":
+        return False
+    up = bool(Demo(DATA_DIR)._alive(DATA_DIR / "temporal.pid"))
+    if up and not (args.quiet or args.attempts):
+        print("The demo is up: using demo thresholds (--quiet 20s --attempts 3).", file=sys.stderr)
+    return up
+
+
 def settings_from(args: argparse.Namespace) -> Settings:
     """Build Settings from parsed arguments."""
-    demo = getattr(args, "demo", False) or _env("demo") == "1"
+    demo = getattr(args, "demo", False) or _env("demo") == "1" or _demo_running(args)
     th = Thresholds()
     quiet = args.quiet or (DEMO_THRESHOLDS["quiet"] if demo else None)
     attempts = args.attempts or (DEMO_THRESHOLDS["attempts"] if demo else None)

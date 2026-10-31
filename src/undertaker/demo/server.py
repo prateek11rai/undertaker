@@ -29,6 +29,7 @@ class Demo:
         self.worker_pid = data_dir / "worker.pid"
 
     def _alive(self, pidfile: Path) -> int | None:
+        """The pid in a pid file if that process is alive."""
         try:
             pid = int(pidfile.read_text())
             os.kill(pid, 0)

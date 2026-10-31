@@ -22,7 +22,7 @@ uv run undertaker serve --demo --source src/undertaker/demo   # http://127.0.0.1
 uv run undertaker demo down      # stops everything it started
 ```
 
-`--demo` only shortens the thresholds (`--quiet 20s --attempts 3`). `--source` lets certificates quote the lines around each stack frame.
+`--demo` only shortens the thresholds (`--quiet 20s --attempts 3`); they also apply by themselves while the demo is up. `--source` lets certificates quote the lines around each stack frame.
 
 ![A certificate](docs/img/certificate.png)
 
