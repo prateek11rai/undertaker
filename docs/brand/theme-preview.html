@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Undertaker · theme preview</title>
+<style>
+  :root {
+    --bg: #0f1211;        /* crypt */
+    --panel: #161b19;     /* slab */
+    --line: #2a312e;      /* mortar */
+    --text: #e9e4d8;      /* bone */
+    --muted: #8f968f;     /* ash */
+    --accent: #8be3a0;    /* ectoplasm: the one bright colour */
+    --orphaned: #a3a7a3;
+    --lost-activity: #b8b08a;
+    --retry-loop: #d9825f;
+    --heartbeat: #a993e6;
+    --broken-code: #e06666;
+    --changed-code: #e08fb8;
+    --waiting-signal: #e3c46f;
+    --long-sleep: #7fa7d9;
+    --haunted-child: #5fbfb3;
+    --alive: #8be3a0;
+    --serif: "Iowan Old Style", "Palatino", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); width: 1280px; padding: 40px 48px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: 56px; margin: 0; letter-spacing: 0.5px; }
+  .tag { color: var(--muted); font-size: 18px; margin-top: 6px; }
+  .head { display: flex; gap: 28px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 28px; }
+  .head img { width: 120px; height: 120px; }
+  h2 { font-family: var(--serif); font-weight: 600; font-size: 22px; margin: 30px 0 14px; color: var(--muted); }
+  .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+  .sw { width: 128px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--panel); }
+  .sw div { height: 44px; }
+  .sw span { display: block; padding: 6px 8px; font: 11px/1.4 var(--mono); color: var(--muted); }
+  .row { display: flex; gap: 28px; align-items: flex-start; }
+  /* toe tag card */
+  .toetag { position: relative; width: 300px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px 22px 22px 8px; padding: 18px 20px 16px 34px; }
+  .toetag::before { content: ""; position: absolute; left: 12px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--bg); border: 1px solid var(--line); }
+  .cause { display: inline-block; font: 600 11px/1 var(--mono); text-transform: uppercase; letter-spacing: 1px; padding: 5px 8px; border-radius: 4px; color: var(--bg); }
+  .wid { font: 15px/1.3 var(--mono); margin: 10px 0 4px; }
+  .meta { color: var(--muted); font-size: 13px; line-height: 1.5; }
+  /* certificate */
+  .cert { flex: 1; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 26px 30px; }
+  .cert h3 { font-family: var(--serif); font-size: 26px; font-weight: 600; margin: 0 0 4px; }
+  .cert .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+  .field { display: grid; grid-template-columns: 170px 1fr; gap: 8px; padding: 8px 0; border-top: 1px dashed var(--line); font-size: 14px; }
+  .field b { font-family: var(--serif); font-weight: 600; color: var(--muted); }
+  .epitaph { font-family: var(--serif); font-style: italic; color: var(--accent); margin-top: 14px; font-size: 16px; }
+  code, .cmd { font-family: var(--mono); font-size: 13px; }
+  .cmd { display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; margin-top: 6px; color: var(--text); }
+  .btns { display: flex; gap: 10px; margin-top: 14px; }
+  .btn { font: 600 13px var(--sans); padding: 8px 14px; border-radius: 6px; border: 1px solid var(--line); color: var(--text); background: transparent; }
+  .btn.primary { border-color: var(--accent); color: var(--accent); }
+  .btn[disabled] { opacity: 0.4; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="logo.svg" alt="">
+    <div>
+      <h1>undertaker</h1>
+      <div class="tag">Finds the Temporal workflows that will never finish, and tells you why. Runs on your laptop with Gemma.</div>
+    </div>
+  </div>
+
+  <h2>Palette</h2>
+  <div class="swatches">
+    <div class="sw"><div style="background:#0f1211"></div><span>crypt #0f1211</span></div>
+    <div class="sw"><div style="background:#161b19"></div><span>slab #161b19</span></div>
+    <div class="sw"><div style="background:#2a312e"></div><span>mortar #2a312e</span></div>
+    <div class="sw"><div style="background:#e9e4d8"></div><span>bone #e9e4d8</span></div>
+    <div class="sw"><div style="background:#8f968f"></div><span>ash #8f968f</span></div>
+    <div class="sw"><div style="background:#8be3a0"></div><span>ectoplasm #8be3a0</span></div>
+  </div>
+
+  <h2>Causes of undeath</h2>
+  <div class="swatches">
+    <div class="sw"><div style="background:var(--orphaned)"></div><span>orphaned</span></div>
+    <div class="sw"><div style="background:var(--lost-activity)"></div><span>lost activity</span></div>
+    <div class="sw"><div style="background:var(--retry-loop)"></div><span>retry loop</span></div>
+    <div class="sw"><div style="background:var(--heartbeat)"></div><span>stopped heartbeat</span></div>
+    <div class="sw"><div style="background:var(--broken-code)"></div><span>broken code</span></div>
+    <div class="sw"><div style="background:var(--changed-code)"></div><span>changed code</span></div>
+    <div class="sw"><div style="background:var(--waiting-signal)"></div><span>waiting for signal</span></div>
+    <div class="sw"><div style="background:var(--long-sleep)"></div><span>long sleep</span></div>
+    <div class="sw"><div style="background:var(--haunted-child)"></div><span>undead child</span></div>
+  </div>
+
+  <h2>A toe tag (morgue card) and a certificate</h2>
+  <div class="row">
+    <div>
+      <div class="toetag">
+        <span class="cause" style="background:var(--retry-loop)">retry loop</span>
+        <div class="wid">order-1042</div>
+        <div class="meta">OrderWorkflow · bakery-orders<br>undead for 2 h 14 min · attempt 47</div>
+      </div>
+      <div class="toetag" style="margin-top:14px">
+        <span class="cause" style="background:var(--waiting-signal)">waiting for signal</span>
+        <div class="wid">order-1051</div>
+        <div class="meta">OrderWorkflow · bakery-orders<br>undead for 41 min · nothing scheduled</div>
+      </div>
+      <div class="toetag" style="margin-top:14px">
+        <span class="cause" style="background:var(--alive)">alive</span>
+        <div class="wid">inventory-nightly</div>
+        <div class="meta">InventoryWorkflow · bakery-ops<br>heartbeat 3 s ago · attempt 1</div>
+      </div>
+    </div>
+    <div class="cert">
+      <h3>Certificate of undeath</h3>
+      <div class="sub">order-1042 · run 7f3c… · written by gemma4:e4b, every fact checked</div>
+      <div class="field"><b>Born</b><span>31 Oct 2026, 22:05</span></div>
+      <div class="field"><b>Last sign of life</b><span>event 11, ActivityTaskScheduled, 22:05</span></div>
+      <div class="field"><b>Cause</b><span>Retry loop in activity <code>charge_card</code></span></div>
+      <div class="field"><b>Diagnosis</b><span><code>charge_card</code> has failed 47 times with the same <code>ValueError: amount must be positive</code>. The retry policy has no maximum attempts and no non-retryable error types, so it will retry forever. The bug is in <code>activities.py:42</code>.</span></div>
+      <div class="field"><b>Remedy</b><span>Fix the activity and deploy the worker, or mark the error non-retryable.<span class="cmd">temporal workflow terminate --workflow-id order-1042 --reason "retry loop"</span></span></div>
+      <div class="epitaph">"It tried forty-seven times to pay for a cake that cost nothing."</div>
+      <div class="btns"><button class="btn primary">Copy command</button><button class="btn" disabled>Lay to rest</button><button class="btn" disabled>Resurrect</button></div>
+    </div>
+  </div>
+</body>
+</html>
