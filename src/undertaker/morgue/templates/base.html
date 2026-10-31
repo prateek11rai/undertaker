@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}undertaker{% endblock %}</title>
+<link rel="icon" href="/static/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/theme.css">
+</head>
+<body data-actions="{{ 1 if s.allow_actions else 0 }}">
+<header class="head">
+  <a href="/"><img src="/static/logo.svg" alt="undertaker logo"></a>
+  <div class="grow">
+    <h1><a href="/">undertaker</a></h1>
+    <div class="where mono">{{ s.address }} · {{ s.namespace }}</div>
+    <div class="tally"><b>{{ undead }} undead</b> · {{ alive }} alive · <span id="swept" data-at="{{ swept }}">{% if swept %}swept just now{% else %}not swept yet{% endif %}</span></div>
+  </div>
+  <button class="btn primary" id="sweep">Sweep now</button>
+</header>
+{% if m.error %}<div class="notice">{{ m.error }}</div>{% endif %}
+{% block body %}{% endblock %}
+<footer>Read-only{% if s.allow_actions %}, actions on{% endif %}. Rules make the diagnosis; {{ s.model }} only writes the words, and every fact it cites is checked. Nothing leaves this machine.</footer>
+<script src="/static/morgue.js"></script>
+</body>
+</html>

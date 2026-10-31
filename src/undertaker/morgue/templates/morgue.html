@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Morgue · undertaker{% endblock %}
+{% block body %}
+<nav class="filters" id="filters">
+  <button class="chip on" data-cause="all" data-count="{{ tags|length }}">All {{ tags|length }}</button>
+  {% for key, (label, rule) in CAUSES.items() %}
+  <button class="chip" data-cause="{{ key }}" data-count="{{ counts[key] }}" title="{{ rule }}"><span class="dot" style="background:var(--{{ key }})"></span>{{ key }} {{ counts[key] }}</button>
+  {% endfor %}
+</nav>
+<main class="grid" id="grid">
+  {% for d, fact in tags %}
+  <a class="toetag" href="/w/{{ d.workflow_id|urlencode }}" data-cause="{{ d.cause }}">
+    <span class="cause" style="background:var(--{{ d.cause }})">{{ d.cause }}</span>
+    <div class="wid">{{ d.workflow_id }}</div>
+    <div class="meta">{{ d.workflow_type }} · {{ d.task_queue }}<br>{{ fact }}</div>
+  </a>
+  {% else %}
+  <div class="empty">No running workflows in {{ s.namespace }}.</div>
+  {% endfor %}
+</main>
+{% endblock %}

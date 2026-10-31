@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ d.workflow_id }} · undertaker{% endblock %}
+{% block body %}
+<a class="back" href="/">&larr; Back to the morgue</a>
+<article class="cert" data-wid="{{ d.workflow_id }}">
+  {% if d.undead %}
+  <h2>Certificate of undeath</h2>
+  <div class="sub"><span class="mono">{{ d.workflow_id }}</span> · run <span class="mono">{{ d.run_id[:8] }}…</span> · <span class="label {{ 'template' if w.cert.source != 'model' else '' }}">{{ by }}</span>{% if pending %} · the model certificate is still being written{% endif %}{% if stale %} · written at event {{ w.cert.last_event_id }}, attempt {{ w.cert.attempt }}{% endif %}</div>
+  {% else %}
+  <h2>Still alive</h2>
+  <div class="sub"><span class="mono">{{ d.workflow_id }}</span> · run <span class="mono">{{ d.run_id[:8] }}…</span></div>
+  {% endif %}
+
+  <div class="field"><b>Workflow</b><span><span class="mono">{{ d.workflow_type }}</span> on <span class="mono">{{ d.task_queue }}</span></span></div>
+  <div class="field"><b>Born</b><span>{{ d.born|when }}</span></div>
+  {% if d.last_event %}
+  <div class="field"><b>Last sign of life</b><span>event {{ d.last_event.id }}, {{ d.last_event.type }}, {{ d.last_event.time|when }}</span></div>
+  {% endif %}
+  <div class="field"><b>Cause</b><span><span class="cause" style="background:var(--{{ d.cause }})">{{ d.cause }}</span> &nbsp;{{ d.label }}. <span class="note">{{ d.rule }}</span></span></div>
+  <div class="field"><b>{{ 'Undead for' if d.undead else 'Why alive' }}</b><span>{{ fact.removeprefix('undead for ') }}</span></div>
+  {% if w %}
+  <div class="field"><b>Diagnosis</b><span><div class="headline">{{ w.cert.headline|code }}</div>{{ w.cert.diagnosis|code }}<div class="note">{{ 'Written by ' ~ w.cert.model ~ ', every fact checked.' if w.cert.source == 'model' else 'Template certificate, written by code from the evidence.' }}</div></span></div>
+  <div class="field"><b>Next step</b><span>{{ w.cert.next_step|code }}</span></div>
+  {% endif %}
+  {% if d.details.child %}
+  <div class="field"><b>Child</b><span><a class="mono" style="color:var(--undead-child)" href="/w/{{ d.details.child|urlencode }}">{{ d.details.child }}</a> ({{ d.details.child_cause }}) &rarr; its certificate</span></div>
+  {% endif %}
+  <div class="field"><b>Evidence</b><span>
+    <table class="ev">
+    {% for e in d.evidence %}
+      <tr{% if w and e.key in w.cert.evidence %} title="cited"{% endif %}><td>{{ e.key }}</td><td>{{ e.text }}</td><td>{{ e.time|when if e.time else '' }}</td></tr>
+    {% endfor %}
+    </table>
+  </span></div>
+  {% if w and w.excerpts %}
+  {% for x in w.excerpts %}
+  <div class="field"><b>Source</b><span><span class="mono">{{ x.file }}:{{ x.line }}</span>
+<pre class="src">{% for line in x.lines %}{% set n = x.start + loop.index0 %}<span class="{{ 'hit' if n == x.line else '' }}">{{ '%4d'|format(n) }}  {{ line }}</span>
+{% endfor %}</pre></span></div>
+  {% endfor %}
+  {% endif %}
+  {% if remedy %}
+  <div class="field"><b>Remedy</b><span>{{ remedy.sentence|code }}
+    {% for c in remedy.commands %}
+    <div class="cmdlabel">{{ c.label }}</div>
+    <div class="cmdrow"><code class="cmd">{{ c.cmd }}</code><button class="btn small copy" data-copy="{{ c.cmd }}">Copy</button></div>
+    {% endfor %}
+  </span></div>
+  {% endif %}
+  {% if w and w.cert.epitaph %}
+  <div class="epitaph">&ldquo;{{ w.cert.epitaph }}&rdquo;</div>
+  {% endif %}
+  {% if d.undead %}
+  <div class="btns">
+    {% if remedy.commands %}<button class="btn primary copy" data-copy="{{ remedy.commands[-1].cmd if d.cause in ('retry-loop', 'heartbeat') else remedy.commands[0].cmd }}">Copy command</button>{% endif %}
+    {% set why = '' if s.allow_actions else 'Read-only. Start undertaker serve with --allow-actions to enable.' %}
+    <button class="btn danger action" data-action="terminate" data-confirm="Lay {{ d.workflow_id }} to rest? This terminates the running workflow." {% if not s.allow_actions %}disabled title="{{ why }}"{% endif %}>Lay to rest</button>
+    <button class="btn action" data-action="reset" data-confirm="Resurrect {{ d.workflow_id }}? This resets it to its last workflow task as a new run." {% if not s.allow_actions %}disabled title="{{ why }}"{% endif %}>Resurrect</button>
+  </div>
+  {% if not s.allow_actions %}<p class="note">Lay to rest and Resurrect are off: the morgue is read-only. Copy the command, or restart with <code>--allow-actions</code>.</p>{% endif %}
+  {% endif %}
+</article>
+{% endblock %}

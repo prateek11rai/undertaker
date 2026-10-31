@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Undertaker">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- wisp rising from the step that never finished -->
+  <path d="M88 52 C 80 42, 96 36, 88 26 C 82 18, 92 12, 90 6" fill="none" stroke="#8be3a0" stroke-width="3" stroke-linecap="round" opacity="0.85" filter="url(#glow)"/>
+  <!-- headstone -->
+  <path d="M26 116 V58 C26 34 44 20 64 20 C84 20 102 34 102 58 V116 Z" fill="#1b211f" stroke="#e9e4d8" stroke-width="4" stroke-linejoin="round"/>
+  <!-- engraved workflow: two steps done, the last one still running -->
+  <line x1="42" y1="66" x2="86" y2="66" stroke="#e9e4d8" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+  <circle cx="42" cy="66" r="6" fill="#e9e4d8"/>
+  <circle cx="64" cy="66" r="6" fill="#e9e4d8"/>
+  <circle cx="86" cy="66" r="7" fill="#0f1211" stroke="#8be3a0" stroke-width="3" filter="url(#glow)"/>
+  <!-- engraving lines -->
+  <line x1="44" y1="86" x2="84" y2="86" stroke="#e9e4d8" stroke-width="3" stroke-linecap="round" opacity="0.35"/>
+  <line x1="50" y1="97" x2="78" y2="97" stroke="#e9e4d8" stroke-width="3" stroke-linecap="round" opacity="0.25"/>
+  <!-- ground -->
+  <line x1="14" y1="116" x2="114" y2="116" stroke="#e9e4d8" stroke-width="4" stroke-linecap="round"/>
+</svg>
