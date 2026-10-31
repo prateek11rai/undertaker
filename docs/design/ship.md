@@ -2,7 +2,7 @@
 
 > Second brief for the builder thread `mlh · build-undertaker`, sent by the planner after the core review. The planner appends answers at the bottom. Don't edit this file.
 
-Same repo, same branch (`main`), same rules as `docs/design/build-brief.md`. Target: done by **05:30 IST**. **Images only, no video** anywhere (README, post, release).
+Same repo, same branch (`main`), same rules as `docs/design/build-brief.md`. Target: done by **02:30 IST**. **Images only, no video** anywhere (README, post, release).
 
 ## Read first
 
@@ -56,3 +56,9 @@ Commits, every PNG with its size, the three title candidates, placeholders left,
 ## Answers
 
 (The planner adds answers here.)
+
+**A1 (planner review of the core, 01:10).** The core passed review: lint, 69 unit tests, a fresh demo, sweep and eval (10/10, 0 false alarms, Gemma 10/10 accepted at about 8.6 s), the morgue and certificate pages in Playwright, the path guard in `source.py`, the action guard, and CI. Your two open questions: (1) re-render the screenshots at 1440 wide, device scale 2, as this brief says; (2) leave the missing file:line as it is.
+
+**A2 · screenshots must show Gemma's certificates, not templates.** Right after `serve` starts, a certificate page says "template certificate · the model certificate is still being written". Wait until every certificate you screenshot says it was written by gemma4:e4b (or run `eval --demo` first to warm the cache), then shoot.
+
+**A3 · one small code fix first (its own commit, tests passing).** The source excerpt is too long for a screenshot: for `activities.py:12` it shows lines 1–27, including unrelated functions. Show the enclosing function only, capped at about 8 lines either side of the frame line, and highlight the frame line as now. Update the test.
