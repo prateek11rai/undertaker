@@ -1,11 +1,12 @@
 """Source excerpts around stack frames, only from files inside the given folder."""
 
+import ast
 from dataclasses import dataclass
 from pathlib import Path, PurePath
 
 from undertaker.temporal.evidence import Frame
 
-AROUND = 15
+AROUND = 8
 
 
 @dataclass
@@ -66,6 +67,34 @@ def resolve_inside(root: Path, frame_path: str) -> Path | None:
     return best
 
 
+def enclosing_function(lines: list[str], line: int, suffix: str) -> tuple[int, int]:
+    """First and last line of the innermost Python function around a line (decorators included).
+
+    Args:
+        lines: The file's lines.
+        line: The frame's line number (1-based).
+        suffix: The file suffix; only ``.py`` is parsed.
+
+    Returns:
+        The line range, or the whole file if there is no enclosing function.
+    """
+    whole = (1, len(lines))
+    if suffix != ".py":
+        return whole
+    try:
+        tree = ast.parse("\n".join(lines))
+    except (SyntaxError, ValueError):
+        return whole
+    best = whole
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef):
+            first = min([node.lineno] + [d.lineno for d in node.decorator_list])
+            last = node.end_lineno or node.lineno
+            if first <= line <= last and last - first < best[1] - best[0]:
+                best = (first, last)
+    return best
+
+
 def excerpts(frames: list[Frame], root: Path | None, limit: int = 2) -> list[Excerpt]:
     """Read ~30 lines around each frame that resolves inside root."""
     if not root:
@@ -79,8 +108,9 @@ def excerpts(frames: list[Frame], root: Path | None, limit: int = 2) -> list[Exc
             lines = p.read_text(errors="replace").splitlines()
         except OSError:
             continue
-        start = max(1, f.line - AROUND)
-        end = min(len(lines), f.line + AROUND)
+        lo, hi = enclosing_function(lines, f.line, p.suffix)
+        start = max(lo, f.line - AROUND)
+        end = min(hi, f.line + AROUND)
         rel = str(p.relative_to(root.resolve()))
         out.append(Excerpt(rel, f.line, start, lines[start - 1 : end]))
     return out

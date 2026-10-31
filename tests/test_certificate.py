@@ -168,8 +168,30 @@ def test_source_excerpt_inside_root(tmp_path):
     xs = excerpts([Frame("/elsewhere/pkg/activities.py", 50, "charge_card")], tmp_path)
     assert len(xs) == 1
     assert xs[0].file == os.path.join("pkg", "activities.py")
-    assert xs[0].start == 35 and len(xs[0].lines) == 31
+    assert xs[0].start == 42 and len(xs[0].lines) == 17
     assert ">  50  line 50" in xs[0].text
+
+
+def test_source_excerpt_is_the_enclosing_function(tmp_path):
+    body = [
+        "import os",
+        "",
+        "",
+        "@deco",
+        "async def charge_card(amount):",
+        '    """Doc."""',
+        "    if amount <= 0:",
+        "        raise ValueError('no')",
+        "    return amount",
+        "",
+        "",
+        "def other():",
+        "    return 1",
+    ]
+    (tmp_path / "activities.py").write_text("\n".join(body))
+    x = excerpts([Frame("activities.py", 8, "charge_card")], tmp_path)[0]
+    assert x.start == 4 and x.lines[0] == "@deco"
+    assert x.lines[-1] == "    return amount"
 
 
 def test_source_refuses_dotdot_symlink_and_outside(tmp_path):
