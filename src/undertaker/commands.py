@@ -37,7 +37,7 @@ async def run(args: argparse.Namespace) -> int:
     if args.cmd == "watch":
         from undertaker.watch import watch
 
-        return await watch(s)
+        return await watch(s, once=args.once)
     return 2
 
 

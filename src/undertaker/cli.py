@@ -80,6 +80,7 @@ def build_parser() -> argparse.ArgumentParser:
     w = sub.add_parser("watch", help="notify for each new undead (macOS)")
     _common(w)
     w.add_argument("--every", default=_env("every", "60s"))
+    w.add_argument("--once", action="store_true", help="one sweep, then exit")
     e = sub.add_parser("eval", help="score the sweep against the demo manifest")
     _common(e)
     d = sub.add_parser("demo", help="the haunted bakery: up | down | status")
