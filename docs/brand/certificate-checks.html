@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Certificate checks</title>
+<link rel="stylesheet" href="brand.css"><link rel="stylesheet" href="diagram.css">
+<style>
+  .cols { display: grid; grid-template-columns: 1fr 64px 1.05fr 64px 1.2fr; align-items: start; }
+  pre { margin: 10px 0 0; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px;
+        font: 17px/1.5 var(--mono); color: var(--text); white-space: pre; }
+  .k { color: var(--accent); }
+  ol { margin: 6px 0 0; padding-left: 26px; }
+  ol li { font-size: 20px; line-height: 1.38; color: var(--text); margin-bottom: 7px; }
+  ol li span { color: var(--muted); }
+  .end { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 28px; }
+  .end .box h3 { font-size: 26px; }
+  .yes { border-color: var(--accent); } .yes h3 { color: var(--accent); }
+  .retry { border-color: var(--waiting-signal); } .retry h3 { color: var(--waiting-signal); }
+  .no { border-color: var(--retry-loop); } .no h3 { color: var(--retry-loop); }
+</style></head><body>
+<h1>How a certificate is checked</h1>
+<p class="lede">Gemma writes the words. Plain code decides whether they reach the page.</p>
+<div class="cols">
+  <div class="box"><h3>What the model gets</h3><ul>
+    <li>the cause and its rule text</li><li>workflow id, type, task queue, born</li><li>the evidence list (keyed facts)</li><li>top stack frames</li><li>with <code>--source</code>: the enclosing function, only from files inside that folder</li>
+    <li>failure text inside <code>&lt;data&gt;</code> tags, as data</li></ul></div>
+  <div class="arrow">→</div>
+  <div class="box model"><h3>What it answers</h3><p>Ollama JSON schema, temperature 0.2:</p>
+<pre>{<span class="k">"headline"</span>:  "≤ 12 words",
+ <span class="k">"diagnosis"</span>: "≤ 70 words",
+ <span class="k">"evidence"</span>:  ["e5", "failure"],
+ <span class="k">"next_step"</span>: "≤ 30 words",
+ <span class="k">"epitaph"</span>:   "≤ 14 words"}</pre></div>
+  <div class="arrow">→</div>
+  <div class="box code"><h3>Checks, in code</h3><ol>
+    <li>Every cited evidence key exists.</li>
+    <li>Every number is in the evidence.</li>
+    <li>Every <code>`code span`</code>, file, <code>file:line</code>, activity or signal name is in the evidence or the excerpt.</li>
+    <li>No other cause is named.</li>
+    <li>No commands or URLs. <span>(The model never writes commands.)</span></li>
+    <li>Lengths hold.</li>
+    <li>The epitaph has no digits and no identifiers.</li></ol></div>
+</div>
+<div class="end">
+  <div class="box yes"><h3>All pass</h3><p>Shown as "written by gemma4:e4b, every fact checked". Cached per workflow state.</p></div>
+  <div class="box retry"><h3>Any fail</h3><p>One retry, with the exact reasons sent back to the model.</p></div>
+  <div class="box no"><h3>Fails again</h3><p>The template certificate for that cause, built from the evidence and labelled as a template.</p></div>
+</div>
+</body></html>

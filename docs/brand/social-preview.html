@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>social preview</title>
+<link rel="stylesheet" href="brand.css">
+<style>
+  body { width: 1280px; height: 640px; overflow: hidden; position: relative; }
+  .shot { position: absolute; right: -190px; top: 118px; width: 820px; height: 404px; border-radius: 14px; overflow: hidden;
+          border: 1.5px solid var(--line); transform: rotate(-5deg); box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
+  .shot img { width: 1440px; margin: -186px 0 0 -96px; transform: scale(0.78); transform-origin: 0 0; }
+  .fade { position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg) 40%, rgba(15,18,17,0.0) 62%); }
+  .main { position: absolute; left: 80px; top: 0; bottom: 0; width: 600px; display: flex; flex-direction: column; justify-content: center; }
+  .main img { width: 120px; height: 120px; margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: 84px; margin: 0; line-height: 1; letter-spacing: 0.5px; }
+  .tagline { font-size: 28px; margin-top: 20px; line-height: 1.3; }
+  .small { color: var(--muted); font-size: 19px; margin-top: 20px; line-height: 1.5; }
+  .small b { color: var(--accent); font-weight: 500; }
+</style></head><body>
+<div class="shot"><img src="../img/morgue.png" alt=""></div>
+<div class="fade"></div>
+<div class="main">
+  <img src="logo.svg" alt="">
+  <h1>undertaker</h1>
+  <div class="tagline">Finds the Temporal workflows that will never finish, and tells you why.</div>
+  <div class="small"><b>Local Gemma 4</b> · read-only by default<br>nothing leaves your machine</div>
+</div>
+</body></html>

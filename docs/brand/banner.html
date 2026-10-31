@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>banner</title>
+<link rel="stylesheet" href="brand.css">
+<style>
+  body { width: 1280px; height: 400px; overflow: hidden; position: relative; }
+  .ghosts { position: absolute; right: -40px; top: 26px; display: grid; grid-template-columns: repeat(3, 250px);
+            gap: 14px; opacity: 0.16; transform: rotate(-4deg); }
+  .fade { position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg) 46%, rgba(15,18,17,0.55) 75%, rgba(15,18,17,0.2)); }
+  .main { position: absolute; left: 84px; top: 0; bottom: 0; display: flex; align-items: center; gap: 40px; }
+  .main img { width: 168px; height: 168px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: 84px; margin: 0; letter-spacing: 0.5px; line-height: 1; }
+  .tagline { font-size: 25px; margin-top: 16px; max-width: 760px; line-height: 1.3; }
+  .small { color: var(--muted); font-size: 17px; margin-top: 18px; letter-spacing: 0.2px; }
+  .small b { color: var(--accent); font-weight: 500; }
+  .rule { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent); }
+</style></head><body>
+<div class="ghosts">
+  <div class="tag"><span class="chip" style="background:var(--retry-loop)">retry-loop</span><div class="wid">order-1042</div><div class="meta">attempt 32</div></div>
+  <div class="tag"><span class="chip" style="background:var(--heartbeat)">heartbeat</span><div class="wid">order-1043</div><div class="meta">heartbeat timeout</div></div>
+  <div class="tag"><span class="chip" style="background:var(--lost-activity)">lost-activity</span><div class="wid">order-1044</div><div class="meta">0 pollers</div></div>
+  <div class="tag"><span class="chip" style="background:var(--orphaned)">orphaned</span><div class="wid">order-1045</div><div class="meta">0 pollers</div></div>
+  <div class="tag"><span class="chip" style="background:var(--broken-code)">broken-code</span><div class="wid">order-1046</div><div class="meta">task attempt 4</div></div>
+  <div class="tag"><span class="chip" style="background:var(--changed-code)">changed-code</span><div class="wid">order-1047</div><div class="meta">task attempt 3</div></div>
+  <div class="tag"><span class="chip" style="background:var(--waiting-signal)">waiting-signal</span><div class="wid">order-1048</div><div class="meta">nothing scheduled</div></div>
+  <div class="tag"><span class="chip" style="background:var(--long-sleep)">long-sleep</span><div class="wid">order-1049</div><div class="meta">timer fires 31 Oct 2027</div></div>
+  <div class="tag"><span class="chip" style="background:var(--undead-child)">undead-child</span><div class="wid">order-1050</div><div class="meta">child order-1050-box</div></div>
+</div>
+<div class="fade"></div>
+<div class="main">
+  <img src="logo.svg" alt="">
+  <div>
+    <h1>undertaker</h1>
+    <div class="tagline">Finds the Temporal workflows that will never finish, and tells you why.</div>
+    <div class="small"><b>Local Gemma 4</b> · read-only by default · nothing leaves your machine</div>
+  </div>
+</div>
+<div class="rule"></div>
+</body></html>

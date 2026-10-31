@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>DEV cover</title>
+<link rel="stylesheet" href="brand.css">
+<style>
+  body { width: 1000px; height: 420px; overflow: hidden; position: relative; }
+  .row { position: absolute; left: 0; right: 0; bottom: -34px; display: flex; gap: 22px; justify-content: center; opacity: 0.18; }
+  .stone { width: 92px; height: 112px; border: 2px solid var(--text); border-bottom: 0; border-radius: 46px 46px 0 0; background: #1b211f; }
+  .stone.lit { border-color: var(--accent); }
+  .ground { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--line); }
+  .main { position: absolute; left: 100px; right: 100px; top: 0; height: 330px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .name { display: flex; align-items: center; gap: 26px; }
+  .name img { width: 112px; height: 112px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: 76px; margin: 0; line-height: 1; letter-spacing: 0.5px; }
+  .tagline { font-size: 24px; margin-top: 22px; line-height: 1.3; max-width: 760px; }
+  .small { color: var(--muted); font-size: 16px; margin-top: 14px; }
+  .small b { color: var(--accent); font-weight: 500; }
+</style></head><body>
+<div class="row"><div class="stone"></div><div class="stone"></div><div class="stone"></div><div class="stone"></div><div class="stone lit"></div><div class="stone"></div><div class="stone"></div><div class="stone"></div></div>
+<div class="ground"></div>
+<div class="main">
+  <div class="name"><img src="logo.svg" alt=""><h1>undertaker</h1></div>
+  <div class="tagline">Finds the Temporal workflows that will never finish, and tells you why.</div>
+  <div class="small"><b>Local Gemma 4</b> · read-only by default · nothing leaves your machine</div>
+</div>
+</body></html>

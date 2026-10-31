@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>sweep</title>
+<link rel="stylesheet" href="brand.css">
+<style>
+  body { width: 1200px; padding: 40px; }
+  .term { background: #0b0d0c; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .bar { background: var(--panel); border-bottom: 1px solid var(--line); padding: 10px 14px; display: flex; gap: 8px; align-items: center; }
+  .bar i { width: 12px; height: 12px; border-radius: 50%; background: var(--line); display: inline-block; }
+  .bar span { margin-left: 12px; color: var(--muted); font: 13px var(--mono); }
+  pre { margin: 0; padding: 20px 22px 24px; font: 14.5px/1.6 var(--mono); color: var(--text); }
+  .prompt { color: var(--accent); }
+</style></head><body>
+<div class="term"><div class="bar"><i></i><i></i><i></i><span>undertaker</span></div>
+<pre><span class="prompt">$</span> uv run undertaker sweep
+<span class="muted">The demo is up: using demo thresholds (--quiet 20s --attempts 3).</span>
+10 undead · 2 alive · 127.0.0.1:7233 default
+
+<span class="muted">WORKFLOW ID        TYPE                  CAUSE           </span>
+order-1045         LegacyOrderWorkflow   <span style="color:var(--orphaned)">orphaned</span>        undead for 30 s · 0 pollers on bakery-legacy
+order-1050-box     BoxWorkflow           <span style="color:var(--orphaned)">orphaned</span>        undead for 30 s · 0 pollers on bakery-legacy
+order-1044         FireOvenWorkflow      <span style="color:var(--lost-activity)">lost-activity</span>   undead for 30 s · 0 pollers on bakery-ovens
+order-1046         RecipeWorkflow        <span style="color:var(--broken-code)">broken-code</span>     undead for 30 s · task attempt 4
+order-1047         DecorateCakeWorkflow  <span style="color:var(--changed-code)">changed-code</span>    undead for 17 s · task attempt 3
+order-1043         BakeBatchWorkflow     <span style="color:var(--heartbeat)">heartbeat</span>       undead for 30 s · attempt 6 · heartbeat timeout
+order-1042         PayOrderWorkflow      <span style="color:var(--retry-loop)">retry-loop</span>      undead for 30 s · attempt 32
+order-1050         GiftBoxOrderWorkflow  <span style="color:var(--undead-child)">undead-child</span>    undead for 30 s · child order-1050-box
+order-1049         HolidayCakeWorkflow   <span style="color:var(--long-sleep)">long-sleep</span>      undead for 30 s · timer fires 31 Oct 2027
+order-1048         AwaitPaymentWorkflow  <span style="color:var(--waiting-signal)">waiting-signal</span>  undead for 30 s · nothing scheduled
+inventory-nightly  InventoryWorkflow     <span style="color:var(--alive)">alive</span>           heartbeat 6 s ago
+proof-dough        ProofDoughWorkflow    <span style="color:var(--alive)">alive</span>           timer fires in 59 s</pre></div>
+</body></html>

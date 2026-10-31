@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Causes of undeath</title>
+<link rel="stylesheet" href="brand.css"><link rel="stylesheet" href="diagram.css">
+<style>
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: var(--panel); border: 1.5px solid var(--line); border-radius: 10px 26px 26px 10px; padding: 22px 24px 22px 26px; border-left-width: 8px; }
+  .card .chip { font-size: 15px; padding: 7px 10px; }
+  .card h3 { font-family: var(--serif); font-weight: 600; font-size: 28px; margin: 14px 0 10px; }
+  .card .rule { font-size: 20px; line-height: 1.4; color: var(--text); }
+  .card .fix { font-size: 19px; line-height: 1.4; color: var(--muted); margin-top: 12px; border-top: 1px dashed var(--line); padding-top: 12px; }
+  .card .fix b { color: var(--accent); font-weight: 600; }
+  .foot { margin-top: 26px; font-size: 21px; color: var(--muted); }
+</style></head><body>
+<h1>Nine causes of undeath</h1>
+<p class="lede">Checked in this order; the first match wins. Anything else is <span class="accent">alive</span>, with the reason.</p>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--orphaned)"><span class="chip" style="background:var(--orphaned)">orphaned</span><h3>No one is listening</h3><div class="rule">Workflow task scheduled, never started, and no poller on its task queue.</div><div class="fix"><b>Remedy</b> Start a worker that polls the queue, or lay it to rest.</div></div>
+  <div class="card" style="border-left-color:var(--lost-activity)"><span class="chip" style="background:var(--lost-activity)">lost-activity</span><h3>Sent to a worker that never came</h3><div class="rule">Activity scheduled and never started; no poller on the activity's task queue.</div><div class="fix"><b>Remedy</b> Start a worker for that activity queue, or lay it to rest.</div></div>
+  <div class="card" style="border-left-color:var(--broken-code)"><span class="chip" style="background:var(--broken-code)">broken-code</span><h3>Its own code keeps killing it</h3><div class="rule">Workflow task attempt 2 or more; the last failure is a plain error.</div><div class="fix"><b>Remedy</b> Fix the workflow code, deploy, then reset past the bad task.</div></div>
+  <div class="card" style="border-left-color:var(--changed-code)"><span class="chip" style="background:var(--changed-code)">changed-code</span><h3>Its code changed while it slept</h3><div class="rule">The same, but the failure is non-determinism (<code>TMPRL1100</code>).</div><div class="fix"><b>Remedy</b> Put the old path behind <code>workflow.patched</code>, deploy, reset.</div></div>
+  <div class="card" style="border-left-color:var(--heartbeat)"><span class="chip" style="background:var(--heartbeat)">heartbeat</span><h3>Stopped breathing</h3><div class="rule">Activity attempt over the threshold; the last failure is a heartbeat timeout.</div><div class="fix"><b>Remedy</b> Make the activity heartbeat in time, or lay it to rest.</div></div>
+  <div class="card" style="border-left-color:var(--retry-loop)"><span class="chip" style="background:var(--retry-loop)">retry-loop</span><h3>Dies and rises, forever</h3><div class="rule">Activity attempt over the threshold, a real failure, no retry maximum in sight.</div><div class="fix"><b>Remedy</b> Fix the activity or mark the error non-retryable.</div></div>
+  <div class="card" style="border-left-color:var(--undead-child)"><span class="chip" style="background:var(--undead-child)">undead-child</span><h3>Waiting on an undead child</h3><div class="rule">A pending child workflow that is itself undead.</div><div class="fix"><b>Remedy</b> Fix the child first; its certificate is linked.</div></div>
+  <div class="card" style="border-left-color:var(--long-sleep)"><span class="chip" style="background:var(--long-sleep)">long-sleep</span><h3>Asleep for a very long time</h3><div class="rule">An open timer longer than <code>--long-sleep</code> (7 days by default).</div><div class="fix"><b>Remedy</b> If the duration is a mistake, fix it and reset.</div></div>
+  <div class="card" style="border-left-color:var(--waiting-signal)"><span class="chip" style="background:var(--waiting-signal)">waiting-signal</span><h3>Waiting for a visitor who never comes</h3><div class="rule">Nothing pending at all; the last event is older than <code>--quiet</code>.</div><div class="fix"><b>Remedy</b> Send the signal it handles (names from the worker), or lay it to rest.</div></div>
+</div>
+<p class="foot">Thresholds are flags: <code>--quiet 10m</code>, <code>--attempts 5</code>, <code>--poller-window 2m</code>, <code>--long-sleep 7d</code>. Every remedy comes with the exact <code>temporal</code> command.</p>
+</body></html>

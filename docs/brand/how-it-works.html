@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>How it works</title>
+<link rel="stylesheet" href="brand.css"><link rel="stylesheet" href="diagram.css">
+<style>
+  .machine { position: relative; border: 2.5px dashed var(--accent); border-radius: 22px; padding: 48px 36px 36px; }
+  .machine > .label { position: absolute; top: -15px; left: 34px; background: var(--bg); padding: 0 12px; color: var(--accent); }
+  .row { display: grid; align-items: stretch; gap: 0; }
+  .r1 { grid-template-columns: 1.25fr 64px 1fr 64px 1.05fr 64px 0.9fr; }
+  .r2 { grid-template-columns: 1.1fr 64px 1fr 64px 1.05fr 64px 0.95fr; margin-top: 30px; }
+  .down { text-align: right; font-size: 40px; color: var(--muted); padding-right: 11%; margin-top: 18px; height: 20px; line-height: 20px; }
+  .split { display: flex; flex-direction: column; gap: 14px; }
+  .split .box { flex: 1; }
+  .yes { color: var(--accent); } .no { color: var(--retry-loop); }
+  .outside { display: flex; gap: 22px; margin-top: 30px; align-items: center; }
+  .x { border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 18px; color: var(--muted); font-size: 21px; text-decoration: line-through; text-decoration-color: var(--broken-code); }
+</style></head><body>
+<h1>How Undertaker works</h1>
+<p class="lede">Code makes the diagnosis. Gemma only writes the words, and code checks every fact it cites.</p>
+<div class="machine">
+  <span class="label">Your machine and your own Temporal · nothing crosses this line</span>
+  <div class="row r1">
+    <div class="box"><h3>Temporal server</h3><ul><li>list running workflows</li><li>describe each one</li><li>history (cached by last event)</li><li><code>DescribeTaskQueue</code> pollers</li><li>metadata query (signals)</li></ul></div>
+    <div class="arrow">→</div>
+    <div class="box"><h3>Evidence</h3><p>Small keyed facts: event ids, attempts, failures, stack frames, poller counts, timers.</p></div>
+    <div class="arrow">→</div>
+    <div class="box code"><h3>Rules, in code</h3><p>Nine causes, checked in a fixed order. The first match wins; otherwise alive.</p></div>
+    <div class="arrow">→</div>
+    <div class="box code"><h3>Cause</h3><p>One cause per workflow, its evidence, and the exact <code>temporal</code> command.</p></div>
+  </div>
+  <div class="down">↓</div>
+  <div class="row r2">
+    <div class="box"><h3>Morgue · CLI</h3><p>Toe tags on 127.0.0.1:8666, <code>sweep</code>, <code>inspect</code>, <code>watch</code>. Read-only by default.</p></div>
+    <div class="arrow">←</div>
+    <div class="split">
+      <div class="box"><h3 class="yes">Accepted</h3><p>The page says "written by gemma4:e4b, every fact checked".</p></div>
+      <div class="box"><h3 class="no">Rejected twice</h3><p>A plain template certificate, labelled as one.</p></div>
+    </div>
+    <div class="arrow">←</div>
+    <div class="box code"><h3>Checks, in code</h3><p>Keys exist, numbers and names are in the evidence, no other cause, no commands, lengths. One retry with the reasons.</p></div>
+    <div class="arrow">←</div>
+    <div class="box model"><h3>Gemma 4 e4b</h3><p>Through Ollama on localhost, JSON schema, temperature 0.2. Sees the cause, evidence and source excerpt only.</p></div>
+  </div>
+</div>
+<div class="outside"><span class="label">Never used</span><span class="x">hosted model APIs</span><span class="x">telemetry</span><span class="x">CDNs and web fonts</span></div>
+</body></html>

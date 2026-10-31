@@ -1,0 +1,24 @@
+/* Shared look for the brand pages; values match src/undertaker/morgue/static/theme.css. */
+:root {
+  --bg: #0f1211; --panel: #161b19; --line: #2a312e; --text: #e9e4d8; --muted: #8f968f; --accent: #8be3a0;
+  --orphaned: #a3a7a3; --lost-activity: #b8b08a; --retry-loop: #d9825f; --heartbeat: #a993e6;
+  --broken-code: #e06666; --changed-code: #e08fb8; --waiting-signal: #e3c46f; --long-sleep: #7fa7d9;
+  --undead-child: #5fbfb3; --alive: #8be3a0;
+  --serif: "Iowan Old Style", "Palatino", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); }
+.serif { font-family: var(--serif); }
+.mono { font-family: var(--mono); }
+.muted { color: var(--muted); }
+.accent { color: var(--accent); }
+.chip { display: inline-block; font: 600 11px/1 var(--mono); text-transform: uppercase; letter-spacing: 1px;
+        padding: 5px 8px; border-radius: 4px; color: var(--bg); }
+.tag { position: relative; background: var(--panel); border: 1px solid var(--line);
+       border-radius: 8px 22px 22px 8px; padding: 14px 18px 12px 32px; }
+.tag::before { content: ""; position: absolute; left: 12px; top: 50%; width: 11px; height: 11px; margin-top: -5.5px;
+               border-radius: 50%; background: var(--bg); border: 1px solid var(--line); }
+.tag .wid { font: 14px/1.3 var(--mono); margin: 8px 0 3px; }
+.tag .meta { color: var(--muted); font-size: 12px; line-height: 1.45; }
