@@ -1,48 +1,33 @@
-<p align="center"><img src="docs/brand/logo.svg" width="96" alt="undertaker logo"></p>
+![undertaker: finds the Temporal workflows that will never finish, and tells you why](docs/img/banner.png)
 
-# undertaker
+Undertaker finds the Temporal workflows that will never finish, sorts each one into a cause using Temporal's own data, and writes a checked **certificate of undeath** for it.
+Gemma 4 runs on your laptop through Ollama and writes the words; plain code makes the diagnosis and checks every fact the model cites.
 
-Finds the Temporal workflows that will never finish, and tells you why. It sorts every running workflow into a cause using Temporal's own data, then writes a checked **certificate of undeath** for each one with Gemma 4 running locally through Ollama.
-
-![The morgue](docs/img/morgue.png)
+![The morgue: one toe tag per running workflow, coloured by cause](docs/img/morgue.png)
 
 ## Why local
 
-Workflow histories hold real payloads (orders, customers, card errors), and stack traces point into private code. Sending them to a hosted model to ask "why is this stuck" is the thing most teams can't do. A 4B model on your own machine can. Undertaker talks to your Temporal server and to Ollama on localhost, and nothing else: no telemetry, no CDN, no web fonts.
+Workflow histories hold real payloads (orders, customers, card errors), and stack traces point into private code. Sending them to a hosted model to ask "why is this stuck" is the thing most teams can't do. A 4B open model on your own machine can. Undertaker talks to your Temporal server and to Ollama on localhost, and nothing else: no telemetry, no CDN, no web fonts.
 
-## 60-second start
+## The demo in 60 seconds
 
 You need macOS with Homebrew, `uv`, the Temporal CLI (`brew install temporal`) and, for model certificates, Ollama with `gemma4:e4b`.
 
 ```sh
 uv sync
-uv run undertaker demo up        # local dev server + a worker full of broken bakery workflows
-uv run undertaker sweep --demo   # wait ~30 s first, for the demo thresholds
-uv run undertaker serve --demo --source src/undertaker/demo   # http://127.0.0.1:8666
-uv run undertaker demo down      # stops everything it started
+uv run undertaker demo up      # local dev server + a worker full of broken bakery workflows
+uv run undertaker sweep        # wait ~30 s first
+uv run undertaker serve --source src/undertaker/demo   # the morgue on http://127.0.0.1:8666
+uv run undertaker demo down    # stops everything it started
 ```
 
-`--demo` only shortens the thresholds (`--quiet 20s --attempts 3`); they also apply by themselves while the demo is up. `--source` lets certificates quote the lines around each stack frame.
+The demo is a made-up bakery with one zombie per cause, two healthy workflows and three finished orders. While it is up, Undertaker uses short demo thresholds (`--quiet 20s --attempts 3`) by itself. `--source` lets certificates quote the function around each stack frame.
 
-![A certificate](docs/img/certificate.png)
-
-## How it works
-
-```mermaid
-flowchart LR
-  T[(Temporal)] -->|list, describe, history, pollers| R[Rules in code]
-  R -->|cause + evidence| G[Gemma 4 e4b via Ollama]
-  G -->|JSON certificate| C{Checks in code}
-  C -->|every fact found| M[Morgue / CLI]
-  C -->|rejected twice| P[Template certificate] --> M
-```
-
-1. **Code diagnoses.** A sweep lists running workflows, then reads `describe`, the history (cached by last event id) and the task-queue pollers. Fixed rules, in a fixed order, pick the cause and collect evidence: event ids, attempts, failures, stack frames, poller counts.
-2. **The model explains.** Gemma gets the cause, the rule, the evidence and (with `--source`) about 30 lines around each frame inside your source folder. It answers in a JSON schema: headline, diagnosis, cited evidence keys, next step and an epitaph.
-3. **Code checks the model.** Every cited key must exist; every number, file, `file:line`, code span and activity or signal name must appear in the evidence or the excerpt; no other cause may be named; no commands or URLs; lengths hold; the epitaph has no digits or identifiers. One retry with the reasons, then a plain template. The page always says which one you are reading.
-4. **Commands come from code.** Every certificate shows the exact `temporal` command for the remedy. The model never writes commands.
+![undertaker sweep: ten undead workflows, each with its cause, and two alive](docs/img/sweep.png)
 
 ## Causes of undeath
+
+![Nine causes of undeath, each with its rule and remedy](docs/img/diagrams/causes.png)
 
 | Cause | Shown as | Rule |
 |---|---|---|
@@ -54,10 +39,39 @@ flowchart LR
 | `retry-loop` | Dies and rises, forever | Activity attempt ≥ `--attempts`, a real failure, no retry maximum in sight |
 | `undead-child` | Waiting on an undead child | A pending child workflow that is itself undead |
 | `long-sleep` | Asleep for a very long time | An open timer longer than `--long-sleep` |
-| `waiting-signal` | Waiting for a visitor who never comes | Nothing pending at all and the last event older than `--quiet`; lists signal names from the worker's metadata query |
+| `waiting-signal` | Waiting for a visitor who never comes | Nothing pending at all and the last event older than `--quiet`; lists the signal names the worker reports |
 | `alive` | Alive | None of the above, with the reason ("heartbeat 3 s ago", "timer fires in 40 s") |
 
-The first matching rule wins, in this order.
+The first matching rule wins, in this order. Every remedy comes with the exact `temporal` command, with your `--address` and `--namespace` filled in.
+
+## How it works
+
+![How Undertaker works: Temporal, evidence, rules, cause, Gemma, checks, morgue; all on your machine](docs/img/diagrams/how-it-works.png)
+
+1. **Code diagnoses.** A sweep lists running workflows, then reads `describe`, the history (cached by last event id) and the `DescribeTaskQueue` pollers. Fixed rules, in a fixed order, pick the cause and collect evidence: event ids, attempts, failures, stack frames, poller counts. For `waiting-signal` it asks the worker's built-in `__temporal_workflow_metadata` query for signal names.
+2. **The model explains.** Gemma 4 e4b gets the cause, the rule, the evidence and (with `--source`) the function around each frame, read only from files inside your source folder. It answers in an Ollama JSON schema: headline, diagnosis, cited evidence keys, next step and an epitaph.
+3. **Code checks the model.** One retry with the reasons, then a plain template. The page always says which one you are reading.
+4. **Commands come from code.** The model never writes commands.
+
+## Certificates and checks
+
+![A certificate of undeath for a retry loop, naming activities.py line 12](docs/img/certificate-retry-loop.png)
+
+![How a certificate is checked: what the model gets, its JSON answer, seven checks, the retry and the fallback](docs/img/diagrams/certificate-checks.png)
+
+The checks, all in code:
+
+- every cited evidence key exists;
+- every number in the text appears in the evidence;
+- every `code span`, file name, `file:line`, activity or signal name appears in the evidence or the source excerpt;
+- no other cause is named;
+- no commands or URLs;
+- the lengths hold (headline 12 words, diagnosis 70, next step 30, epitaph 14);
+- the epitaph has no digits and no identifiers.
+
+Failure messages reach the model inside `<data>` tags as data, and all model text is HTML-escaped before it reaches the page.
+
+More certificates: [changed code](docs/img/certificate-changed-code.png) · [waiting for a signal](docs/img/certificate-waiting-signal.png) · [undead child](docs/img/certificate-undead-child.png).
 
 ## Commands
 
@@ -87,11 +101,27 @@ undertaker doctor                    Temporal reachable, Ollama reachable, model
 | `--no-model` | off | template certificates only |
 | `--allow-actions` | off | `serve` only: enables Lay to rest (terminate) and Resurrect (reset), each with a confirm |
 | `--every` | `30s` serve, `60s` watch | sweep interval |
-| `--demo` | off | `--quiet 20s --attempts 3` |
+| `--demo` | off | `--quiet 20s --attempts 3` (automatic while the demo is up) |
 
 Every flag has an `UNDERTAKER_*` environment variable (`UNDERTAKER_QUIET=5m`).
 
 Undertaker is read-only unless you pass `--allow-actions`. The action endpoints also require a custom header, so another page in your browser can't trigger them.
+
+## Measured on the demo
+
+From `uv run undertaker eval --demo --source src/undertaker/demo`, two runs on a fresh demo (details in [docs/BUILD_LOG.md](docs/BUILD_LOG.md)):
+
+| | Run 1 | Run 2 |
+|---|---|---|
+| Undead found by the rules | 10/10 | 10/10 |
+| Missed | 0 | 0 |
+| False alarms | 0 | 0 |
+| Alive and right | 2/2 | 2/2 |
+| Gemma certificates accepted on the first try | 10/10 | 10/10 |
+| Fell back to the template | 0 | 0 |
+| Seconds per certificate | 8.4 | 7.6 |
+
+On an Apple Silicon Mac with `gemma4:e4b` on Ollama 0.35.1. These are ten made-up workflows, built on purpose to match the rules, so treat them as a smoke test rather than a benchmark. The rejection path is covered by unit tests.
 
 ## Limits
 
@@ -111,10 +141,20 @@ uv run pytest -m temporal   # needs /opt/homebrew/bin/temporal
 uv run pytest -m model      # needs Ollama with gemma4:e4b
 ```
 
-Build notes, decisions and eval numbers: [docs/BUILD_LOG.md](docs/BUILD_LOG.md). Design: [docs/design/spec.md](docs/design/spec.md).
+Build notes and decisions: [docs/BUILD_LOG.md](docs/BUILD_LOG.md). Design: [docs/design/spec.md](docs/design/spec.md). How the images are made: [docs/brand/README.md](docs/brand/README.md).
+
+## Built for Hacktoberfest 2026
+
+Built for the DEV [Hacktoberfest Open-Source AI Challenge, Week 4: Ghost in the Machine](https://dev.to/challenges/hacktoberfest-week4-2026-10-26). The post: {{POST_URL}}
+
+## After the deadline
+
+## Credits
+
+- [Temporal](https://temporal.io), the open-source durable execution platform, and its Python SDK and CLI.
+- [Gemma 4](https://ai.google.dev/gemma) (`gemma4:e4b`), run locally through [Ollama](https://ollama.com).
+- FastAPI, Uvicorn, Jinja2 and Pydantic.
 
 ## License
 
 MIT. See [LICENSE](LICENSE).
-
-Built for Hacktoberfest 2026, the DEV [Open-Source AI Challenge, Week 4 "Ghost in the Machine"](https://dev.to/challenges/hacktoberfest-week4-2026-10-26).
