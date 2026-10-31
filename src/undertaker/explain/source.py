@@ -96,7 +96,7 @@ def enclosing_function(lines: list[str], line: int, suffix: str) -> tuple[int, i
 
 
 def excerpts(frames: list[Frame], root: Path | None, limit: int = 2) -> list[Excerpt]:
-    """Read ~30 lines around each frame that resolves inside root."""
+    """The enclosing function (at most 8 lines either side) for each frame inside root."""
     if not root:
         return []
     out = []
