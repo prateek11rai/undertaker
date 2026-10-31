@@ -47,6 +47,7 @@ class Morgue:
         self.lock = asyncio.Lock()
         self.cache = CertCache(s.data_dir / "certificates.sqlite")
         self.writing = False
+        self._writer: asyncio.Task | None = None
         self.cert_state: dict[tuple[str, str], tuple[int, str]] = {}
 
     async def sweep_now(self) -> None:
@@ -82,10 +83,11 @@ class Morgue:
             self.writing = False
 
     async def loop(self) -> None:
-        """Sweep every --every, then write certificates."""
+        """Sweep every --every; certificates are written alongside, one at a time."""
         while True:
             await self.sweep_now()
-            await self.write_certs()
+            if not self.writing:
+                self._writer = asyncio.create_task(self.write_certs())
             await asyncio.sleep(self.s.every.total_seconds())
 
     def cert_for(self, d: Diagnosis) -> tuple[Written, bool]:
@@ -176,7 +178,8 @@ def create_app(s: Settings, start_loop: bool = True) -> FastAPI:
     async def api_sweep(request: Request):
         _guard(request)
         await m.sweep_now()
-        asyncio.create_task(m.write_certs())
+        if not m.writing:
+            m._writer = asyncio.create_task(m.write_certs())
         return {"undead": sum(d.undead for d in m.results), "error": m.error}
 
     @app.get("/api/state")

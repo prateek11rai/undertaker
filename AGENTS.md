@@ -6,7 +6,17 @@ Undertaker finds Temporal workflows that will never finish and writes a checked 
 
 - Python 3.13 (Homebrew) with uv: `uv sync`, `uv run undertaker …`. uv never downloads a Python.
 - Checks: `uv run ruff check && uv run ruff format --check && uv run pytest`. Markers: `-m temporal` (needs `/opt/homebrew/bin/temporal`), `-m model` (needs Ollama with `gemma4:e4b`).
-- Demo: `uv run undertaker demo up`, then `uv run undertaker serve` (http://127.0.0.1:8666). Always `uv run undertaker demo down` when finished; leave no processes behind.
+- Demo: `uv run undertaker demo up`, wait ~30 s, then `uv run undertaker sweep --demo` or `uv run undertaker serve --demo --source src/undertaker/demo` (http://127.0.0.1:8666). `uv run undertaker eval --demo` scores rules and model. Always `uv run undertaker demo down` and stop `serve` when finished; check with `pgrep -fl "temporal server|undertaker.demo|undertaker serve"`.
+- Runtime files (dev-server db and logs, pid files, `certificates.sqlite`, `manifest.json`, `eval.json`) live in `.data/` (git-ignored).
+
+## Layout
+
+- `src/undertaker/temporal/`: the only code that touches protobufs (`client.py`); `evidence.py` holds the plain data classes.
+- `src/undertaker/diagnose/`: `rules.py` (nine causes + alive, spec order, pure), `remedies.py` (sentences + exact commands).
+- `src/undertaker/explain/`: `certificate.py` (templates, prompt, checks), `model.py` (Ollama over urllib), `writer.py` (model → checks → one retry → template), `cache.py`, `source.py` (excerpts, inside `--source` only), `render.py` (text).
+- `src/undertaker/morgue/`: FastAPI app, Jinja templates, `static/` (theme.css, morgue.js, logo.svg).
+- `src/undertaker/demo/`: the haunted bakery (`workflows.py`, `activities.py`, `seed.py`, `worker.py`, `server.py`, `manifest.py`).
+- Tests: `tests/` (pure unit tests by default; `test_temporal.py` and `test_model.py` are marked).
 
 ## Rules
 

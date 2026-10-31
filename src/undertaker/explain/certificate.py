@@ -195,6 +195,8 @@ Rules:
 - Use only facts in the evidence and source excerpt. Never invent numbers, names, files or lines.
 - Put workflow, activity, signal, file and error names in `backticks`, exactly as written.
 - Cite the evidence keys you used in "evidence".
+- If the evidence has a frame1, say in the diagnosis where the error comes from: its file and line,
+  exactly as written there.
 - Do not name any other cause. Do not write commands or URLs.
 - headline: at most 12 words. diagnosis: at most 70 words. next_step: at most 30 words.
 - epitaph: one gentle, slightly funny line, at most 14 words, no digits, no names or identifiers.
