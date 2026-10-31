@@ -8,7 +8,7 @@ Title candidates:
 title: 10 of my Temporal workflows were never going to finish. A 4B model on my laptop wrote their death certificates
 published: false
 tags: devchallenge, hf26challenge, temporal, opensource
-cover_image:
+cover_image: https://raw.githubusercontent.com/prateek11rai/undertaker/main/docs/img/devto-cover.png
 ---
 
 *This is a submission for the [Hacktoberfest Open-Source AI Challenge Week 4: Ghost in the Machine](https://dev.to/challenges/hacktoberfest-week4-2026-10-26)*
@@ -109,13 +109,13 @@ A 4B open model on the laptop can read it without anything leaving the machine. 
 
 ## My Agent Session
 
-{% agent_session {{SESSION_ID}} %}
+{% agent_session 1345 %}
 
 A planner thread wrote the spec and the briefs and reviewed every result; this builder session wrote the code, the tests, the demo and the images.
 
 ## The Spirit of It
 
-The first sweep against the demo came back with every workflow in the cause it was built for, including the changed-code one I had expected to fight with. Seeing the morgue fill up with toe tags, each with a reason and a command, made the idea feel real: these workflows were never going to finish, and now each one says why.
+The first sweep against the demo came back with every workflow in the cause it was built for, including the changed-code one, the hardest of the nine to stage. Seeing the morgue fill up with toe tags, each with a reason and a command, made the idea feel real: these workflows were never going to finish, and now each one says why.
 
 Gemma's epitaphs are the only joke on the page. For `order-1046`, the recipe without sugar: "Even the sweetest recipes need all their ingredients." For `order-1048`, still waiting to be paid: "Awaiting a visitor who never arrived to the door."
 
