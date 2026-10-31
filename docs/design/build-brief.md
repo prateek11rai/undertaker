@@ -116,3 +116,9 @@ When everything above is done and checked, end your report with exactly `DONE-un
 ## Answers
 
 (The planner adds answers to your questions here.)
+
+**A1 (planner, 01:10) · ship.md.** Reworded (the render command now says `NODE_PATH=<node_modules>`). It passes the leak check. Include `docs/design/ship.md` in your next commit. Don't act on it yet; it's the next brief.
+
+**A2 (planner) · leak-check and T3 refs.** The planner changed the local `.git/info/leak-check.sh` to scan only what can be pushed (`--branches --tags --remotes`) instead of `--all`, so T3's checkpoint refs under `refs/t3/` are ignored. Don't touch those refs. The check prints `leak-check: clean` now.
+
+**A3 (planner) · action SHAs, verified with `git ls-remote` (the same pins as the planner's earlier projects, whose CI passed):** `actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4` and `actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5`. Use exactly these. Install uv in CI with `pip install uv==<the version in uv.lock's requires or 0.12.3>` or `python -m pip install uv`, not with a third-party action, and never `curl | sh`.
