@@ -6,7 +6,7 @@ Title candidates:
 -->
 ---
 title: 10 of my Temporal workflows were never going to finish. A 4B model on my laptop wrote their death certificates
-published: false
+published: true
 tags: devchallenge, hf26challenge, temporal, opensource
 cover_image: https://raw.githubusercontent.com/prateek11rai/undertaker/main/docs/img/devto-cover.png
 ---

@@ -145,7 +145,7 @@ Build notes and decisions: [docs/BUILD_LOG.md](docs/BUILD_LOG.md). Design: [docs
 
 ## Built for Hacktoberfest 2026
 
-Built for the DEV [Hacktoberfest Open-Source AI Challenge, Week 4: Ghost in the Machine](https://dev.to/challenges/hacktoberfest-week4-2026-10-26). The post: {{POST_URL}}
+Built for the DEV [Hacktoberfest Open-Source AI Challenge, Week 4: Ghost in the Machine](https://dev.to/challenges/hacktoberfest-week4-2026-10-26). The post: [10 of my Temporal workflows were never going to finish](https://dev.to/prateek11rai/10-of-my-temporal-workflows-were-never-going-to-finish-a-4b-model-on-my-laptop-wrote-their-death-45f6)
 
 ## After the deadline
 
